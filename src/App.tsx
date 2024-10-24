@@ -1,17 +1,17 @@
-import { useState } from 'react'
-import { ThemeProvider } from 'styled-components'
-import { DarkTheme, LightTheme } from './styles/theme'
-import GlobalStyle from './styles/global'
-import { Home } from './pages/home'
+import { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import { DarkTheme, LightTheme } from './styles/theme';
+import GlobalStyle from './styles/global';
+import { Home } from './pages/Home';
+import { NotFound } from './pages/NotFound';
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    // Recupera a preferência do tema do localStorage, se existir
     const savedTheme = localStorage.getItem('theme');
     return savedTheme === 'dark';
   });
 
-  // Alterna entre Light e Dark e armazena no localStorage
   const toggleTheme = () => {
     setIsDarkMode((prevMode) => {
       const newMode = !prevMode;
@@ -23,9 +23,14 @@ function App() {
   return (
     <ThemeProvider theme={isDarkMode ? DarkTheme : LightTheme}>
       <GlobalStyle />
-      <Home toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
+      <Router>
+        <Routes>
+          <Route path="/" element={<Home toggleTheme={toggleTheme} isDarkMode={isDarkMode} />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </Router>
     </ThemeProvider>
-  )
+  );
 }
 
-export default App
+export default App;
