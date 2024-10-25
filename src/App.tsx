@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import { DarkTheme, LightTheme } from './styles/theme';
 import GlobalStyle from './styles/global';
 import { Home } from './pages/Home';
+import { Login } from './pages/Login';
 import { NotFound } from './pages/NotFound';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home toggleTheme={toggleTheme} isDarkMode={isDarkMode} />} />
+          <Route path="/login" element={<Login />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
