@@ -1,9 +1,13 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
+import { NotFoundContainer } from "./styles";
 
 export function NotFound() {
+    const navigate = useNavigate(); // Hook para navegação
+
     return (
-        <div>
-            <h1>Page Not Found</h1>
-        </div>
+        <NotFoundContainer>
+            <p>Página não encontrada!</p>
+            <button onClick={() => navigate('/')}>Voltar</button> {/* Navega para '/' */}
+        </NotFoundContainer>
     );
 }
