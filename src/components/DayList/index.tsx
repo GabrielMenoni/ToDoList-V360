@@ -1,4 +1,4 @@
-import { DayListWrapper } from "./styles";
+import { DayListWrapper, TrashIcon } from "./styles";
 
 export interface DayTasks {
     id: number;
@@ -13,9 +13,10 @@ interface DayListProps {
     tasks: DayTasks[];
     date: Date;
     onToggleTask: (taskId: number) => void;
+    onDeleteTask: (taskId: number) => void; // Adicionamos a prop de exclusão
 }
 
-export function DayList({ tasks, date, onToggleTask }: DayListProps) {
+export function DayList({ tasks, date, onToggleTask, onDeleteTask }: DayListProps) {
     const formattedDate = new Date(date).toLocaleDateString("pt-BR", {
         weekday: "long",
         day: "numeric",
@@ -29,16 +30,13 @@ export function DayList({ tasks, date, onToggleTask }: DayListProps) {
                 {tasks.length > 0 ? (
                     tasks.map((task) => (
                         <div key={task.id} className="task">
-                            <label
-                                className="container"
-                                style={{ display: "flex", alignItems: "center" }}
-                            >
+                            <label className="container" style={{ display: "flex", alignItems: "center" }}>
                                 <input
                                     type="checkbox"
                                     style={{ display: "none" }}
                                     id={`checkbox-${task.id}`}
                                     checked={task.isDone}
-                                    onChange={() => onToggleTask(task.id)} // Usar apenas o evento onChange
+                                    onChange={() => onToggleTask(task.id)}
                                 />
                                 <svg
                                     viewBox="0 0 64 64"
@@ -61,6 +59,9 @@ export function DayList({ tasks, date, onToggleTask }: DayListProps) {
                                 {task.description && <p>{task.description}</p>}
                                 <p>Status: {task.isDone ? "Concluído" : "Pendente"}</p>
                             </div>
+
+                            {/* Ícone de lixeira com evento de clique */}
+                            <TrashIcon onClick={() => onDeleteTask(task.id)} style={{ cursor: "pointer" }} />
                         </div>
                     ))
                 ) : (
@@ -70,3 +71,4 @@ export function DayList({ tasks, date, onToggleTask }: DayListProps) {
         </DayListWrapper>
     );
 }
+

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { FaSmileBeam } from "react-icons/fa";
 import { AiOutlineLogout } from "react-icons/ai";
 import { MdDarkMode, MdLightMode } from "react-icons/md";
+import { FaHeart } from "react-icons/fa";
 
 export const PageWrapper = styled.div`
     display: flex;
@@ -260,5 +261,9 @@ export const DarkModeIcon = styled(MdDarkMode)`
 `
 
 export const LightModeIcon = styled(MdLightMode)`
+    font-size: 1.5rem;
+`
+
+export const HeartIcon = styled(FaHeart)`
     font-size: 1.5rem;
 `

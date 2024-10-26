@@ -24,6 +24,7 @@ export const LoginWrapper = styled.div`
     h1 {
         font-size: 2.5rem;
         margin-bottom: 2rem;
+        color: white;
     }
 
     .input-group {
@@ -37,11 +38,12 @@ export const LoginWrapper = styled.div`
         display: flex;
         margin-bottom: 5px;
         font-size: 1.4rem;
+        color: white;
     }
 
     .input-group input {
         width: 95%;
-        height: 1.5rem;
+        height: 3rem;
         font-size: 1rem;
         padding: 10px;
         border: 1px solid #ccc;

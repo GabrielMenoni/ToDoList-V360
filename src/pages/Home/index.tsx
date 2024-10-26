@@ -1,4 +1,5 @@
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { DayTasks } from "../../components/DayList";
 import { DayList } from "../../components/DayList";
 import {
@@ -10,6 +11,7 @@ import {
     AddButtonWrapper,
     Overlay,
     ModalWrapper,
+    HeartIcon,
 } from "./styles";
 import { Calendar } from "../../components/calendar";
 
@@ -41,14 +43,26 @@ const groupTasksByDate = (tasks: DayTasks[]): Map<string, DayTasks[]> => {
 };
 
 export function Home({ toggleTheme, isDarkMode }: HomeProps) {
+    const navigate = useNavigate(); // Hook para navegação
+    const [username, setUsername] = useState<string | null>(null); // Estado para armazenar o username
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [tasks, setTasks] = useState<DayTasks[]>([]);
-    console.log('tasks', tasks);
+
+    // Verifica se existe um username no localStorage ao entrar na página
+    useEffect(() => {
+        const storedUsername = localStorage.getItem("username");
+        if (!storedUsername) {
+            // Redireciona para /login se não houver username
+            navigate("/login");
+        } else {
+            setUsername(storedUsername); // Armazena o username no estado
+        }
+    }, [navigate]);
 
     /* ------------ Modal ------------ */
     function Modal() {
-        const [title, setTitle] = useState('');
-        const [description, setDescription] = useState('');
+        const [title, setTitle] = useState("");
+        const [description, setDescription] = useState("");
         const [important, setImportant] = useState(false);
         const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -67,8 +81,7 @@ export function Home({ toggleTheme, isDarkMode }: HomeProps) {
                 important,
             };
 
-            console.log('newtask', newTask);
-            setTasks((prevTasks) => [...prevTasks, newTask])
+            setTasks((prevTasks) => [...prevTasks, newTask]);
             setIsModalOpen(false); // Fecha o modal
         };
 
@@ -98,15 +111,27 @@ export function Home({ toggleTheme, isDarkMode }: HomeProps) {
                                     type="checkbox"
                                     id="important"
                                     checked={important}
-                                    onChange={(e) => setImportant(e.target.checked)}
+                                    onChange={(e) =>
+                                        setImportant(e.target.checked)
+                                    }
                                 />
-                                <label htmlFor="important">Tarefa importante?</label>
+                                <label htmlFor="important">
+                                    Tarefa importante?
+                                </label>
                             </div>
-                            <button type="button" className="button" onClick={handleAddTask}>
+                            <button
+                                type="button"
+                                className="button"
+                                onClick={handleAddTask}
+                            >
                                 Adicionar!
                             </button>
                         </div>
-                        <Calendar onSelectedDatesChange={(date) => setSelectedDate(date[0])} />
+                        <Calendar
+                            onSelectedDatesChange={(date) =>
+                                setSelectedDate(date[0])
+                            }
+                        />
                     </div>
                 </ModalWrapper>
             </Overlay>
@@ -143,7 +168,10 @@ export function Home({ toggleTheme, isDarkMode }: HomeProps) {
 
     const today = new Date();
     const groupedTasks = groupTasksByDate(tasks);
-    console.log('groupedTasks', groupedTasks);
+
+    const handleDeleteTask = (taskId: number) => {
+        setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
+    };
 
     const handleToggleTask = (taskId: number) => {
         setTasks((prevTasks) =>
@@ -158,7 +186,11 @@ export function Home({ toggleTheme, isDarkMode }: HomeProps) {
     groupedTasks.delete(todayKey);
 
     const sortedDates = Array.from(groupedTasks.keys()).sort();
-    console.log('sortedDates', sortedDates);
+
+    const handleLogOut = () => {
+        localStorage.removeItem("username");
+        navigate("/login");
+    }
 
     return (
         <>
@@ -166,11 +198,11 @@ export function Home({ toggleTheme, isDarkMode }: HomeProps) {
             <PageWrapper>
                 <div className="title">
                     <h1>
-                        Bem vindo, V360! <SmileIcon />
+                        Bem vindo, {username}! <SmileIcon />
                     </h1>
                     <div className="func">
                         <p style={{ color: isDarkMode ? "white" : "inherit" }}>
-                            <LogoutIcon /> Sair
+                            <LogoutIcon onClick={handleLogOut} /> Sair
                         </p>
                         {isDarkMode ? (
                             <p onClick={toggleTheme} style={{ color: "white" }}>
@@ -184,31 +216,25 @@ export function Home({ toggleTheme, isDarkMode }: HomeProps) {
                     </div>
                 </div>
 
-                <p className="subtitle">Confira suas tarefas do dia</p>
+                <p className="subtitle" style={{ color: isDarkMode ? "white" : "inherit" }}>
+                    Confira suas tarefas do dia <HeartIcon />
+                </p>
 
                 <AddButton />
 
-                {todayTasks.length > 0 && (
-                    <div className="dailyTasks">
-                        <DayList
-                            tasks={todayTasks}
-                            date={today}
-                            onToggleTask={handleToggleTask}
-                        />
-                    </div>
-                )}
+                <div className="dailyTasks">
+                    <DayList
+                        tasks={todayTasks}
+                        date={today}
+                        onToggleTask={handleToggleTask}
+                        onDeleteTask={handleDeleteTask}
+                    />
+                </div>
 
                 {sortedDates.map((dateKey) => {
-                    console.log('dateKey', dateKey);
-
-                    // Extraindo ano, mês e dia da string "YYYY-MM-DD"
-                    const [year, month, day] = dateKey.split('-').map(Number);
-
-                    // Criando a data corretamente no fuso local (mês é zero-indexado)
-                    const date = new Date(year, month - 1, day, 12); // Define a hora como meio-dia para evitar problemas de fuso
-
+                    const [year, month, day] = dateKey.split("-").map(Number);
+                    const date = new Date(year, month - 1, day, 12); // Define a hora como meio-dia
                     const tasksForDate = groupedTasks.get(dateKey) || [];
-                    console.log('date:', date);
 
                     return (
                         <div className="otherTasks" key={dateKey}>
@@ -216,6 +242,7 @@ export function Home({ toggleTheme, isDarkMode }: HomeProps) {
                                 tasks={tasksForDate}
                                 date={date}
                                 onToggleTask={handleToggleTask}
+                                onDeleteTask={handleDeleteTask}
                             />
                         </div>
                     );

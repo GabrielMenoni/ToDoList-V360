@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FaTrash } from "react-icons/fa";
 
 export const DayListWrapper = styled.div`
 
@@ -20,7 +21,8 @@ export const DayListWrapper = styled.div`
 
         .task {
             display: flex;
-            gap: 1rem;
+            align-items: center;
+            gap: 1.5rem;
             border-left: 2px solid ${({ theme }) => theme.colors.primary};
             padding-left: 1rem;
 
@@ -68,6 +70,10 @@ export const DayListWrapper = styled.div`
   stroke-dasharray: 70.5096664428711 9999999;
   stroke-dashoffset: -262.2723388671875;
 }
+`
 
-
+export const TrashIcon = styled(FaTrash)`
+    color: ${({ theme }) => theme.colors.primary};
+    cursor: pointer;
+    font-size: 1.5rem;
 `

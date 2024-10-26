@@ -27,8 +27,8 @@ function App() {
       <Router>
         <Routes>
           <Route path="/" element={<Home toggleTheme={toggleTheme} isDarkMode={isDarkMode} />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<NotFound />} />
+          <Route path="/login" element={<Login isDarkMode={isDarkMode} />} />
+          <Route path="*" element={<NotFound isDarkMode={isDarkMode} />} />
         </Routes>
       </Router>
     </ThemeProvider>
