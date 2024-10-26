@@ -15,14 +15,15 @@ export const LoginContainer = styled.div`
 
 export const LoginWrapper = styled.div`
     background-color: ${({ theme }) => theme.colors.secondary};
-    width: 40vw;
+    width: 35vw;
     padding: 20px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
+    box-shadow: 0px 0px 10px rgba(89, 42, 158, 0.8);
     border-radius: 8px;
     text-align: center;
 
     h1 {
         font-size: 2.5rem;
+        margin-bottom: 2rem;
     }
 
     .input-group {
@@ -35,20 +36,24 @@ export const LoginWrapper = styled.div`
     .input-group label {
         display: flex;
         margin-bottom: 5px;
+        font-size: 1.4rem;
     }
 
     .input-group input {
         width: 95%;
+        height: 1.5rem;
+        font-size: 1rem;
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 8px;
         background-color: white;
         color: black;
         margin-left: 5px;
+        margin-bottom: 0.5rem;
     }
 
     button {
-        width: 100%;
+        width: 50%;
         padding: 10px;
         border: none;
         background-color: #4CAF50;
@@ -56,6 +61,8 @@ export const LoginWrapper = styled.div`
         font-size: 16px;
         border-radius: 4px;
         cursor: pointer;
+        margin-bottom: 1rem;
+        margin-top: 0.5rem;
     }
 
     button:hover {
@@ -63,12 +70,16 @@ export const LoginWrapper = styled.div`
     }
 
     .links {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-top: 10px;
+        padding: 1rem;
     }
 
     .links a {
         display: block;
-        color: #007BFF;
+        color: lightgray;
         text-decoration: none;
         margin: 5px 0;
     }
